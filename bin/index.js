@@ -78,9 +78,14 @@ audit_proc.stderr.on('data', (data) => {
 });
 
 audit_proc.on('close', (exit_code) => {
-  const { exitCode, cliOutput } = parse_audit_results(stderr, auditData, threshold, ignoreDev, json_output, whitelist);
-  console.log(cliOutput);
-  process.exit(exitCode);
+  try {
+    const { exitCode, cliOutput } = parse_audit_results(stderr, auditData, threshold, ignoreDev, json_output, whitelist);
+    console.log(cliOutput);
+    process.exit(exitCode);
+  } catch(err) {
+    console.log("Failed to parse output")
+    process.exit(0);
+  }
 });
 
 //
